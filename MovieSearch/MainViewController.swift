@@ -115,6 +115,7 @@ class MainViewController: UIViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         // TODO: 영화 API 호출
+        
         searchBar.resignFirstResponder()
     }
 }
