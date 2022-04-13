@@ -43,6 +43,13 @@ class MainViewController: UIViewController {
         return searchBar
     }()
     
+    lazy var movieListTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(MovieListTableViewCell.self,
+                           forCellReuseIdentifier: MovieListTableViewCell.identifier)
+        return tableView
+    }()
+    
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,10 +91,18 @@ class MainViewController: UIViewController {
             $0.top.equalTo(titleLabel.snp.bottom).offset(32)
             $0.leading.trailing.equalToSuperview()
         }
+        
+        safeAreaView.addSubview(movieListTableView)
+        movieListTableView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     private func setDelegate() {
         searchBar.delegate = self
+        movieListTableView.delegate = self
+        movieListTableView.dataSource = self
     }
     
     
@@ -102,4 +117,18 @@ extension MainViewController: UISearchBarDelegate {
         // TODO: 영화 API 호출
         searchBar.resignFirstResponder()
     }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath)
+
+        return cell
+    }
+
+
 }
