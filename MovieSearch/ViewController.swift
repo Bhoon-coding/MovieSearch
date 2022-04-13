@@ -7,13 +7,22 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class MainViewController: UIViewController {
+    
+    // MARK: Properties
+    
+    // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        view.backgroundColor = .blue
+        
     }
+    
+    // MARK: Methods
 
+    
+    // MARK: @objc
 
 }
 
