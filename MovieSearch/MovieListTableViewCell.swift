@@ -9,6 +9,6 @@ import UIKit
 
 class MovieListTableViewCell: UITableViewCell {
 
-    static identifier = "MovieListTableViewCell"
+    static let identifier = "MovieListTableViewCell"
 
 }
