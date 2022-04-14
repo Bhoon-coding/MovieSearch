@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
     
     // MARK: Properties
     
+    var movies: [Movie] = []
 //    let starImage = UIImage(named: "starFill")
     
     lazy var safeAreaView: UIView = {
@@ -47,6 +48,7 @@ class MainViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(MovieListTableViewCell.self,
                            forCellReuseIdentifier: MovieListTableViewCell.identifier)
+        tableView.rowHeight = 150
         return tableView
     }()
     
@@ -113,10 +115,24 @@ class MainViewController: UIViewController {
 // MARK: extension
 
 extension MainViewController: UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         // TODO: 영화 API 호출
-        NetworkService.shared.fetchMovieData(keyword: searchBar.text!) { response in
-//            <#code#>
+        guard let keyword = searchBar.text else { return }
+        NetworkService.shared.fetchMovieData(keyword: keyword) { result in
+            switch result {
+            case .success(let movieData):
+                guard let movieData = movieData as? [Movie] else { return }
+                self.movies = movieData
+                
+                DispatchQueue.main.async {
+                    self.movieListTableView.reloadData()
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+            
         }
         
         searchBar.resignFirstResponder()
@@ -125,11 +141,15 @@ extension MainViewController: UISearchBarDelegate {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return movies.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
+        
+        cell.set(movies: movies[indexPath.row])
+        
+        
 
         return cell
     }

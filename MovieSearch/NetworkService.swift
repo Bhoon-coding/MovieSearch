@@ -9,7 +9,7 @@ import Foundation
 
 import Alamofire
 
-struct NetworkService {
+class NetworkService {
     static let shared = NetworkService()
     
     let urlString = "https://openapi.naver.com/v1/search/movie.json?"
@@ -18,7 +18,8 @@ struct NetworkService {
 
     // MARK: Alamofire
     // TODO: fetchMovieData 파라미터에 '검색'을 눌렀을때 입력된 text를 보내줘야함.
-    func fetchMovieData(keyword: String, completion: @escaping (Result<Any, Error>) -> ()) {
+    func fetchMovieData(keyword: String,
+                        completion: @escaping (Result<Any, Error>) -> ()) {
         
         let searchParams = ["query": keyword]
     
@@ -27,9 +28,15 @@ struct NetworkService {
                    parameters: searchParams,
                    encoding: URLEncoding.default,
                    headers: ["X-Naver-Client-Id": clientID, "X-Naver-Client-Secret": clientSecret])
+            .validate(statusCode: 200..<300)
             .responseDecodable(of: Movies.self) { response in
-                guard let movies = response.value else { return }
-                debugPrint(movies)
+                switch response.result {
+                case .success(let value):
+                    completion(.success(value.movies))
+
+                case .failure(let error):
+                    completion(.failure(error))
+                }
                 
             }
         
