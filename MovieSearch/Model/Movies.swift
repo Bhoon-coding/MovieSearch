@@ -20,8 +20,8 @@ struct Movies: Codable {
 struct Movie: Codable {
     let title: String
     let image: String
-    let director: String
-    let actor: String
+    var director: String
+    var actor: String
     let userRating: String
     
 }

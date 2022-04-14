@@ -62,10 +62,14 @@ class MovieListTableViewCell: UITableViewCell {
     
     // MARK: Methods
     func set(movies: Movie) {
+        
+        let director = movies.director.dropLast()
+        let actor = movies.actor.replacingOccurrences(of: "|", with: ",").dropLast()
+        
         movieImageView.load(urlString: movies.image)
         titleLabel.text = movies.title
-        directorLabel.text = "감독: \(movies.director)"
-        actorLabel.text = "출연: \(movies.actor)"
+        directorLabel.text = "감독: \(director) "
+        actorLabel.text = "출연: \(actor)"
         userRatingLabel.text = "평점: \(movies.userRating)"
     }
     
