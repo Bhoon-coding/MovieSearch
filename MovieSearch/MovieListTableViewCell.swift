@@ -26,25 +26,22 @@ class MovieListTableViewCell: UITableViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 16)
+        label.font = .boldSystemFont(ofSize: 18)
         return label
     }()
     
     lazy var directorLabel: UILabel = {
         let label = UILabel()
-        
         return label
     }()
     
     lazy var actorLabel: UILabel = {
         let label = UILabel()
-        
         return label
     }()
     
     lazy var userRatingLabel: UILabel = {
         let label = UILabel()
-        
         return label
     }()
     
@@ -62,12 +59,14 @@ class MovieListTableViewCell: UITableViewCell {
     
     // MARK: Methods
     func set(movies: Movie) {
-        
+        let title = movies.title
+            .replacingOccurrences(of: "<b>", with: "")
+            .replacingOccurrences(of: "</b>", with: "")
         let director = movies.director.dropLast()
         let actor = movies.actor.replacingOccurrences(of: "|", with: ",").dropLast()
         
         movieImageView.load(urlString: movies.image)
-        titleLabel.text = movies.title
+        titleLabel.text = title
         directorLabel.text = "감독: \(director) "
         actorLabel.text = "출연: \(actor)"
         userRatingLabel.text = "평점: \(movies.userRating)"
@@ -79,13 +78,13 @@ class MovieListTableViewCell: UITableViewCell {
         movieImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(8)
             $0.leading.equalToSuperview()
-            $0.width.equalTo(108)
+            $0.width.equalTo(88)
         }
         
         contentView.addSubview(movieInfoStackView)
         movieInfoStackView.snp.makeConstraints {
             $0.leading.equalTo(movieImageView.snp.trailing).offset(8)
-            $0.trailing.equalToSuperview().inset(40)
+            $0.trailing.equalToSuperview().inset(56)
             $0.top.bottom.equalToSuperview()
         }
         movieInfoStackView.addArrangedSubview(titleLabel)

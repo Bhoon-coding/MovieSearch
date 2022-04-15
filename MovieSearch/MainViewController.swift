@@ -67,6 +67,20 @@ class MainViewController: UIViewController {
         searchBar.resignFirstResponder()
     }
     
+    private func setDelegate() {
+        searchBar.delegate = self
+        movieListTableView.delegate = self
+        movieListTableView.dataSource = self
+    }
+    
+    // MARK: @objc
+
+}
+
+
+// MARK: extension - UI
+private extension MainViewController {
+    
     private func setUpUI() {
         
         view.backgroundColor = .white
@@ -100,20 +114,8 @@ class MainViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
-    
-    private func setDelegate() {
-        searchBar.delegate = self
-        movieListTableView.delegate = self
-        movieListTableView.dataSource = self
-    }
-    
-    
-    // MARK: @objc
-
 }
-
-// MARK: extension
-
+// MARK: extension - SearchBar
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -139,6 +141,7 @@ extension MainViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: extension - TableView
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
