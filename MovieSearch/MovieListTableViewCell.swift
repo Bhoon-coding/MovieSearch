@@ -102,7 +102,7 @@ class MovieListTableViewCell: UITableViewCell {
         contentView.addSubview(starButton)
         starButton.snp.makeConstraints {
             $0.top.trailing.equalToSuperview().inset(16)
-            $0.size.equalTo(30)
+            $0.size.equalTo(24)
         }
         
     }

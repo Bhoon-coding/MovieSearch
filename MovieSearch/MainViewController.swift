@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     // MARK: Properties
     
     var movies: [Movie] = []
-//    let starImage = UIImage(named: "starFill")
+    var starredMovie: [Movie] = []
     
     lazy var safeAreaView: UIView = {
         let view = UIView()
@@ -31,11 +31,8 @@ class MainViewController: UIViewController {
     
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        // TODO: star 이미지크기 조절
-//        button.setImage(starImage, for: .normal)
         button.setTitle("즐겨찾기", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        
         return button
     }()
     
@@ -48,7 +45,7 @@ class MainViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(MovieListTableViewCell.self,
                            forCellReuseIdentifier: MovieListTableViewCell.identifier)
-        tableView.rowHeight = 150
+        tableView.rowHeight = 130
         return tableView
     }()
     
@@ -75,12 +72,25 @@ class MainViewController: UIViewController {
     
     // MARK: @objc
     @objc func tappedStar(button: UIButton) {
+        let index = button.tag
         button.isSelected = !button.isSelected
+        
+        if button.isSelected {
+            starredMovie.append(movies[index])
+            
+        } else {
+            
+            let removeStarredMovie = starredMovie.filter { $0.title != movies[index].title }
+            starredMovie = removeStarredMovie
+        }
+        
         button.alpha = button.isSelected ? 1 : 0.1
         button.setImage(UIImage(named: "starFill"), for: .selected)
         
+        UserDefaultsService.shared.saveStarredMovie(movie: starredMovie)
+        
         // TODO: [x] 즐겨찾기 레이아웃, 활성/비활성화
-        // [ ] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
+        // [x] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
     }
 
 }
@@ -159,6 +169,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
         
         cell.set(movies: movies[indexPath.row])
+        cell.starButton.tag = indexPath.row
         cell.starButton.addTarget(self, action: #selector(tappedStar(button:)), for: .touchUpInside)
         
         

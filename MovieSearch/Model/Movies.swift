@@ -8,11 +8,9 @@
 import Foundation
 
 struct Movies: Codable {
-    let total: Int
     let movies: [Movie]
     
     enum CodingKeys: String, CodingKey {
-        case total
         case movies = "items"
     }
 }
