@@ -96,7 +96,7 @@ class MainViewController: UIViewController {
 }
 
 
-// MARK: extension - UI
+// MARK: extension - Layout
 private extension MainViewController {
     
     private func setUpUI() {

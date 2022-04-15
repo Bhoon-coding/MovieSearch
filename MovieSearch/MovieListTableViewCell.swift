@@ -79,6 +79,10 @@ class MovieListTableViewCell: UITableViewCell {
         userRatingLabel.text = "평점: \(movies.userRating)"
     }
     
+}
+
+private extension MovieListTableViewCell {
+    // MARK: Cell Layout
     private func setUpCell() {
         
         contentView.addSubview(movieImageView)
@@ -106,5 +110,4 @@ class MovieListTableViewCell: UITableViewCell {
         }
         
     }
-    
 }
