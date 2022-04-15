@@ -74,6 +74,14 @@ class MainViewController: UIViewController {
     }
     
     // MARK: @objc
+    @objc func tappedStar(button: UIButton) {
+        button.isSelected = !button.isSelected
+        button.alpha = button.isSelected ? 1 : 0.1
+        button.setImage(UIImage(named: "starFill"), for: .selected)
+        
+        // TODO: [x] 즐겨찾기 레이아웃, 활성/비활성화
+        // [ ] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
+    }
 
 }
 
@@ -151,6 +159,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
         
         cell.set(movies: movies[indexPath.row])
+        cell.starButton.addTarget(self, action: #selector(tappedStar(button:)), for: .touchUpInside)
         
         
 

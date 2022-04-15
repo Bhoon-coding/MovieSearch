@@ -45,6 +45,13 @@ class MovieListTableViewCell: UITableViewCell {
         return label
     }()
     
+    lazy var starButton: UIButton = {
+        let button = UIButton()
+        button.alpha = 0.1
+        button.setImage(UIImage(named: "star"), for: .normal)
+        return button
+    }()
+    
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -92,7 +99,12 @@ class MovieListTableViewCell: UITableViewCell {
         movieInfoStackView.addArrangedSubview(actorLabel)
         movieInfoStackView.addArrangedSubview(userRatingLabel)
         
+        contentView.addSubview(starButton)
+        starButton.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview().inset(16)
+            $0.size.equalTo(30)
+        }
+        
     }
-    
     
 }
