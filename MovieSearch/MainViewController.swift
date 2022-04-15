@@ -25,7 +25,7 @@ class MainViewController: UIViewController {
         let label = UILabel()
         label.text = "네이버 영화 검색"
         label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 24)
+        label.font = .boldSystemFont(ofSize: 24)
         return label
     }()
     
@@ -33,6 +33,9 @@ class MainViewController: UIViewController {
         let button = UIButton()
         button.setTitle("즐겨찾기", for: .normal)
         button.setTitleColor(.label, for: .normal)
+        button.addTarget(self,
+                         action: #selector(tappedFavoriteButton),
+                         for: .touchUpInside)
         return button
     }()
     
@@ -91,6 +94,11 @@ class MainViewController: UIViewController {
         
         // TODO: [x] 즐겨찾기 레이아웃, 활성/비활성화
         // [x] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
+    }
+    
+    @objc func tappedFavoriteButton() {
+        let favoriteVC = FavoriteViewController()
+        navigationController?.pushViewController(favoriteVC, animated: true)
     }
 
 }
