@@ -107,7 +107,7 @@ class MainViewController: UIViewController {
 // MARK: extension - Layout
 private extension MainViewController {
     
-    private func setUpUI() {
+    func setUpUI() {
         
         view.backgroundColor = .white
         
