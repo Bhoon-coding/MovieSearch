@@ -56,6 +56,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUpNavigation()
         setUpUI()
         setDelegate()
     
@@ -102,12 +103,26 @@ class MainViewController: UIViewController {
     }
     
     @objc func tappedFavoriteButton() {
+        
         let favoriteVC = FavoriteViewController()
         navigationController?.pushViewController(favoriteVC, animated: true)
+        
     }
     
 }
 
+// MARK: extension - Navigation
+private extension MainViewController {
+    
+    func setUpNavigation() {
+        let backBarButtonItem = UIBarButtonItem(title: nil,
+                                                style: .plain,
+                                                target: self,
+                                                action: nil)
+        backBarButtonItem.tintColor = .black
+        navigationItem.backBarButtonItem = backBarButtonItem
+    }
+}
 
 // MARK: extension - Layout
 private extension MainViewController {
@@ -173,7 +188,8 @@ extension MainViewController: UISearchBarDelegate {
 }
 
 // MARK: extension - TableView
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+    // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
     }
@@ -187,10 +203,15 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         cell.starButton.tag = indexPath.row
         cell.starButton.addTarget(self, action: #selector(tappedStar(button:)), for: .touchUpInside)
         
-        
-
         return cell
     }
-
+    
+    // Delegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let movieDetailVC = MovieDetailViewController(movie: movies[indexPath.row])
+        navigationController?.pushViewController(movieDetailVC, animated: true)
+        
+    }
 
 }
