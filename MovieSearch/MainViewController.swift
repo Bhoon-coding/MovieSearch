@@ -67,6 +67,10 @@ class MainViewController: UIViewController {
         searchBar.resignFirstResponder()
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.resignFirstResponder()
+    }
+    
     private func setDelegate() {
         searchBar.delegate = self
         movieListTableView.delegate = self
@@ -94,13 +98,14 @@ class MainViewController: UIViewController {
         
         // TODO: [x] 즐겨찾기 레이아웃, 활성/비활성화
         // [x] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
+        
     }
     
     @objc func tappedFavoriteButton() {
         let favoriteVC = FavoriteViewController()
         navigationController?.pushViewController(favoriteVC, animated: true)
     }
-
+    
 }
 
 
@@ -175,6 +180,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
+        
+        
         
         cell.set(movies: movies[indexPath.row])
         cell.starButton.tag = indexPath.row
