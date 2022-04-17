@@ -79,9 +79,3 @@ private extension MovieDetailViewController {
     }
     
 }
-
-// MARK: extension - WKWebView
-extension MovieDetailViewController: WKUIDelegate {
-    
-    
-}

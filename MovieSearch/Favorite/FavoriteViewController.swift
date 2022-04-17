@@ -32,7 +32,7 @@ final class FavoriteViewController: UIViewController {
         super.viewDidLoad()
 
         navigationItem.title = "즐겨찾기 목록"
-        
+        setUpNavigationBar()
         setUpUI()
         setUpDelegate()
     }
@@ -47,9 +47,20 @@ final class FavoriteViewController: UIViewController {
 
 private extension FavoriteViewController {
     
+    func setUpNavigationBar() {
+        let backBarButtonItem = UIBarButtonItem(title: nil,
+                                                style: .plain,
+                                                target: self,
+                                                action: nil)
+        backBarButtonItem.tintColor = .black
+        navigationItem.backBarButtonItem = backBarButtonItem
+    }
+    
     func setUpUI() {
         
         view.backgroundColor = .white
+        
+        
         
         view.addSubview(starredListTableView)
         starredListTableView.snp.makeConstraints {
@@ -60,6 +71,8 @@ private extension FavoriteViewController {
 }
 
 extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return starredMovies.count
     }
@@ -71,5 +84,9 @@ extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
+    // Delegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieDetailVC = MovieDetailViewController(movie: starredMovies[indexPath.row])
+        navigationController?.pushViewController(movieDetailVC, animated: true)
+    }
 }
