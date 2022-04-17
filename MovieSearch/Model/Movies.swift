@@ -16,10 +16,11 @@ struct Movies: Codable {
 }
 
 struct Movie: Codable {
-    let title: String
-    let image: String
+    var title: String
+    var image: String
     var director: String
     var actor: String
-    let userRating: String
+    var userRating: String
+    var link: String
     
 }

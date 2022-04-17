@@ -56,7 +56,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpNavigation()
+        setUpNavigationBar()
         setUpUI()
         setDelegate()
     
@@ -111,10 +111,10 @@ class MainViewController: UIViewController {
     
 }
 
-// MARK: extension - Navigation
+// MARK: extension - UI
 private extension MainViewController {
     
-    func setUpNavigation() {
+    func setUpNavigationBar() {
         let backBarButtonItem = UIBarButtonItem(title: nil,
                                                 style: .plain,
                                                 target: self,
@@ -122,10 +122,6 @@ private extension MainViewController {
         backBarButtonItem.tintColor = .black
         navigationItem.backBarButtonItem = backBarButtonItem
     }
-}
-
-// MARK: extension - Layout
-private extension MainViewController {
     
     func setUpUI() {
         
@@ -161,6 +157,7 @@ private extension MainViewController {
         }
     }
 }
+
 // MARK: extension - SearchBar
 extension MainViewController: UISearchBarDelegate {
     
@@ -195,13 +192,16 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier,
+                                                 for: indexPath) as! MovieListTableViewCell
         
         
         
         cell.set(movies: movies[indexPath.row])
         cell.starButton.tag = indexPath.row
-        cell.starButton.addTarget(self, action: #selector(tappedStar(button:)), for: .touchUpInside)
+        cell.starButton.addTarget(self,
+                                  action: #selector(tappedStar(button:)),
+                                  for: .touchUpInside)
         
         return cell
     }

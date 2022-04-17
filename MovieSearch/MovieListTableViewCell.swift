@@ -69,8 +69,11 @@ class MovieListTableViewCell: UITableViewCell {
         let title = movies.title
             .replacingOccurrences(of: "<b>", with: "")
             .replacingOccurrences(of: "</b>", with: "")
-        let director = movies.director.dropLast()
-        let actor = movies.actor.replacingOccurrences(of: "|", with: ",").dropLast()
+        let director = movies.director
+            .dropLast()
+        let actor = movies.actor
+            .replacingOccurrences(of: "|", with: ",")
+            .dropLast()
         
         movieImageView.load(urlString: movies.image)
         titleLabel.text = title
