@@ -53,6 +53,12 @@ class MainViewController: UIViewController {
     }()
     
     // MARK: LifeCycle
+    
+    override func loadView() {
+        super.loadView()
+        starredMovie = UserDefaultsService.shared.loadStarredMovie()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,6 +88,7 @@ class MainViewController: UIViewController {
     @objc func tappedStar(button: UIButton) {
         let index = button.tag
         button.isSelected = !button.isSelected
+        print("test index: \(index)")
         
         if button.isSelected {
             starredMovie.append(movies[index])
