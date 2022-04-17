@@ -107,6 +107,8 @@ class MainViewController: UIViewController {
         let favoriteVC = FavoriteViewController()
         navigationController?.pushViewController(favoriteVC, animated: true)
         
+        
+        searchBar.resignFirstResponder()
     }
     
 }
@@ -212,6 +214,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
         let movieDetailVC = MovieDetailViewController(movie: movies[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
         
+        searchBar.resignFirstResponder()
     }
 
 }
