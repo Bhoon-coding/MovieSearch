@@ -20,7 +20,7 @@ class MovieDetailViewController: UIViewController {
     
     lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         return view
     }()
     
@@ -141,21 +141,21 @@ private extension MovieDetailViewController {
         view.addSubview(contentScrollView)
         contentScrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.bottom.equalToSuperview()
+            $0.bottom.trailing.leading.equalToSuperview()
             $0.width.equalTo(view.frame.width)
         }
         
         contentScrollView.addSubview(contentView)
         contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.trailing.bottom.leading.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(view.frame.height)
         }
+        
         contentView.addSubview(movieInfoView)
         movieInfoView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
-            $0.leading.trailing.equalToSuperview().inset(8)
-            $0.width.equalTo(contentView.snp.width)
+            $0.trailing.leading.equalToSuperview().inset(8)
             $0.height.equalTo(130)
         }
         
@@ -180,7 +180,8 @@ private extension MovieDetailViewController {
         
         movieInfoView.addSubview(starButton)
         starButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview().inset(16)
+            $0.top.equalToSuperview().inset(8)
+            $0.trailing.equalToSuperview().inset(16)
             $0.size.equalTo(24)
         }
         
@@ -201,4 +202,3 @@ private extension MovieDetailViewController {
     }
     
 }
-
