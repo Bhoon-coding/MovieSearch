@@ -9,15 +9,15 @@ import UIKit
 
 import SnapKit
 
-final class FavoriteViewController: UIViewController {
+final class FavoriteMovieViewController: UIViewController {
     
-    var starredMovies: [Movie] = []
+    var favoriteMovies: [Movie] = []
     
     // MARK: Properties
-    lazy var starredListTableView: UITableView = {
+    lazy var favoriteListTableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(MovieListTableViewCell.self,
-                           forCellReuseIdentifier: MovieListTableViewCell.identifier)
+        tableView.register(FavoriteMovieTableViewCell.self,
+                           forCellReuseIdentifier: FavoriteMovieTableViewCell.identifer)
         tableView.rowHeight = 130
         return tableView
     }()
@@ -25,7 +25,7 @@ final class FavoriteViewController: UIViewController {
     // MARK: LifeCycle
     override func loadView() {
         super.loadView()
-        starredMovies = UserDefaultsService.shared.loadStarredMovie()
+        favoriteMovies = UserDefaultsService.shared.loadFavoriteMovie()
     }
     
     override func viewDidLoad() {
@@ -40,12 +40,12 @@ final class FavoriteViewController: UIViewController {
     // MARK: Methods
     
     private func setUpDelegate() {
-        starredListTableView.delegate = self
-        starredListTableView.dataSource = self
+        favoriteListTableView.delegate = self
+        favoriteListTableView.dataSource = self
     }
 }
 
-private extension FavoriteViewController {
+private extension FavoriteMovieViewController {
     
     func setUpNavigationBar() {
         let backBarButtonItem = UIBarButtonItem(title: nil,
@@ -60,33 +60,32 @@ private extension FavoriteViewController {
         
         view.backgroundColor = .white
         
-        
-        
-        view.addSubview(starredListTableView)
-        starredListTableView.snp.makeConstraints {
+        view.addSubview(favoriteListTableView)
+        favoriteListTableView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.trailing.leading.equalToSuperview().inset(16)
         }
     }
 }
 
-extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
+extension FavoriteMovieViewController: UITableViewDelegate, UITableViewDataSource {
     
     // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return starredMovies.count
+        return favoriteMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteMovieTableViewCell.identifer, for: indexPath) as! FavoriteMovieTableViewCell
         
-        cell.set(movies: starredMovies[indexPath.row])
+        cell.set(movies: favoriteMovies[indexPath.row])
+        
         return cell
     }
     
     // Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movieDetailVC = MovieDetailViewController(movie: starredMovies[indexPath.row])
+        let movieDetailVC = MovieDetailViewController(movie: favoriteMovies[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
     }
 }

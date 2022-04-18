@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     // MARK: Properties
     
     var movies: [Movie] = []
-    var starredMovie: [Movie] = []
+    var favoriteMovie: [Movie] = []
     
     lazy var safeAreaView: UIView = {
         let view = UIView()
@@ -36,6 +36,8 @@ class MainViewController: UIViewController {
         button.addTarget(self,
                          action: #selector(tappedFavoriteButton),
                          for: .touchUpInside)
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 5
         return button
     }()
     
@@ -56,7 +58,7 @@ class MainViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        starredMovie = UserDefaultsService.shared.loadStarredMovie()
+        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie()
     }
     
     override func viewDidLoad() {
@@ -91,18 +93,18 @@ class MainViewController: UIViewController {
         print("test index: \(index)")
         
         if button.isSelected {
-            starredMovie.append(movies[index])
+            favoriteMovie.append(movies[index])
             
         } else {
             
-            let removeStarredMovie = starredMovie.filter { $0.title != movies[index].title }
-            starredMovie = removeStarredMovie
+            let removeFavoriteMovie = favoriteMovie.filter { $0.title != movies[index].title }
+            favoriteMovie = removeFavoriteMovie
         }
         
         button.alpha = button.isSelected ? 1 : 0.1
         button.setImage(UIImage(named: "starFill"), for: .selected)
         
-        UserDefaultsService.shared.saveStarredMovie(movie: starredMovie)
+        UserDefaultsService.shared.saveFavoriteMovie(movie: favoriteMovie)
         
         // TODO: [x] 즐겨찾기 레이아웃, 활성/비활성화
         // [x] 즐겨찾기 활성화시 즐겨찾는 배열에 저장
@@ -111,8 +113,8 @@ class MainViewController: UIViewController {
     
     @objc func tappedFavoriteButton() {
         
-        let favoriteVC = FavoriteViewController()
-        navigationController?.pushViewController(favoriteVC, animated: true)
+        let favoriteMovieVC = FavoriteMovieViewController()
+        navigationController?.pushViewController(favoriteMovieVC, animated: true)
         
         
         searchBar.resignFirstResponder()
