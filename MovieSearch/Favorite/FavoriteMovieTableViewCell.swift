@@ -61,21 +61,21 @@ class FavoriteMovieTableViewCell: UITableViewCell {
     }()
     
     // MARK: Methods
-    func set(movies: Movie) {
-        let title = movies.title
+    func configure(movieInfo: MovieInfo) {
+        let title = movieInfo.title
             .replacingOccurrences(of: "<b>", with: "")
             .replacingOccurrences(of: "</b>", with: "")
-        let director = movies.director
+        let director = movieInfo.director
             .dropLast()
-        let actor = "\(movies.actor)"
+        let actor = "\(movieInfo.actor)"
             .replacingOccurrences(of: "|", with: ",")
             .dropLast()
         
-        movieImageView.load(urlString: movies.image)
+        movieImageView.load(urlString: movieInfo.image)
         titleLabel.text = title
         directorLabel.text = "감독: \(director) "
         actorLabel.text = "출연: \(actor)"
-        userRatingLabel.text = "평점: \(movies.userRating)"
+        userRatingLabel.text = "평점: \(movieInfo.userRating)"
     }
     
 }

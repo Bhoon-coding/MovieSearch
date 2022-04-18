@@ -47,7 +47,6 @@ class MovieListTableViewCell: UITableViewCell {
     
     lazy var starButton: UIButton = {
         let button = UIButton()
-        button.alpha = 0.1
         button.setImage(UIImage(named: "star"), for: .normal)
         return button
     }()
@@ -65,23 +64,46 @@ class MovieListTableViewCell: UITableViewCell {
     }
     
     // MARK: Methods
-    func set(movies: Movie) {
-        let title = movies.title
+//    func configure(movies: Movie) {
+//        let title = movies.title
+//            .replacingOccurrences(of: "<b>", with: "")
+//            .replacingOccurrences(of: "</b>", with: "")
+//        let director = movies.director
+//            .dropLast()
+//        let actor = movies.actor
+//            .replacingOccurrences(of: "|", with: ",")
+//            .dropLast()
+//
+//        movieImageView.load(urlString: movies.image)
+//        titleLabel.text = title
+//        directorLabel.text = "감독: \(director) "
+//        actorLabel.text = "출연: \(actor)"
+//        userRatingLabel.text = "평점: \(movies.userRating)"
+//    }
+    
+    func configure(movie: Movie) {
+        let movieInfo = movie.movieInfo
+        let title = movieInfo.title
             .replacingOccurrences(of: "<b>", with: "")
             .replacingOccurrences(of: "</b>", with: "")
-        let director = movies.director
+        let director = movieInfo.director
             .dropLast()
-        let actor = movies.actor
+        let actor = movieInfo.actor
             .replacingOccurrences(of: "|", with: ",")
             .dropLast()
         
-        movieImageView.load(urlString: movies.image)
+        movieImageView.load(urlString: movieInfo.image)
         titleLabel.text = title
         directorLabel.text = "감독: \(director) "
         actorLabel.text = "출연: \(actor)"
-        userRatingLabel.text = "평점: \(movies.userRating)"
+        userRatingLabel.text = "평점: \(movieInfo.userRating)"
+        
+        starButton.setImage(UIImage(named: movie.isLiked ? "starFill" : "star" ), for: .normal)
+        starButton.alpha = movie.isLiked ? 1 : 0.3
     }
-    
+    override func prepareForReuse() {
+        starButton.setImage(UIImage(named: "star"), for: .normal)
+    }
 }
 
 private extension MovieListTableViewCell {

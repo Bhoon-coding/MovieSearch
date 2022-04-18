@@ -96,7 +96,7 @@ extension FavoriteMovieViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteMovieTableViewCell.identifer, for: indexPath) as! FavoriteMovieTableViewCell
         
-        cell.set(movies: favoriteMovies[indexPath.row])
+        cell.configure(movieInfo: favoriteMovies[indexPath.row].movieInfo)
         cell.starButton.tag = indexPath.row
         cell.starButton.addTarget(self, action: #selector(tappedFavoriteButton(button:)), for: .touchUpInside)
         
@@ -105,7 +105,7 @@ extension FavoriteMovieViewController: UITableViewDelegate, UITableViewDataSourc
     
     // Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movieDetailVC = MovieDetailViewController(movie: favoriteMovies[indexPath.row])
+        let movieDetailVC = MovieDetailViewController(movieInfo: favoriteMovies[indexPath.row].movieInfo)
         navigationController?.pushViewController(movieDetailVC, animated: true)
     }
 }
