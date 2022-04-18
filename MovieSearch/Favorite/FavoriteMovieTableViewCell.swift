@@ -105,7 +105,6 @@ private extension FavoriteMovieTableViewCell {
         contentView.addSubview(starButton)
         starButton.snp.makeConstraints {
             $0.top.trailing.equalToSuperview().inset(16)
-            $0.size.equalTo(24)
         }
         
     }

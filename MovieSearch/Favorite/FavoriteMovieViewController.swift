@@ -52,12 +52,12 @@ final class FavoriteMovieViewController: UIViewController {
         button.setImage(UIImage(named: "star"), for: .selected)
         button.alpha = button.isSelected ? 0.1 : 1
         
-        if button.isSelected {
-            favoriteMovies.remove(at: index)
-            DispatchQueue.main.async {
+            if button.isSelected {
+                favoriteMovies.remove(at: index)
+                DispatchQueue.main.async {
                 self.favoriteListTableView.reloadData()
+                UserDefaultsService.shared.saveFavoriteMovie(movie: self.favoriteMovies)
             }
-            UserDefaultsService.shared.saveFavoriteMovie(movie: favoriteMovies)
         }
         
     }

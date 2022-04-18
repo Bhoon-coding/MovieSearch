@@ -33,10 +33,12 @@ class MainViewController: UIViewController {
         let button = UIButton()
         button.setTitle("즐겨찾기", for: .normal)
         button.setTitleColor(.label, for: .normal)
+        button.setImage(UIImage(named: "starFill"), for: .normal)
         button.addTarget(self,
                          action: #selector(tappedFavoriteButton),
                          for: .touchUpInside)
         button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.cornerRadius = 5
         return button
     }()
@@ -152,7 +154,9 @@ private extension MainViewController {
 
         safeAreaView.addSubview(favoriteButton)
         favoriteButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
+            $0.top.bottom.equalTo(titleLabel)
+            $0.trailing.equalToSuperview()
+            $0.width.equalTo(88)
         }
         
         safeAreaView.addSubview(searchBar)
