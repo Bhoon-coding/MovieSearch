@@ -43,6 +43,24 @@ final class FavoriteMovieViewController: UIViewController {
         favoriteListTableView.delegate = self
         favoriteListTableView.dataSource = self
     }
+    
+    // MARK: @objc
+    @objc func tappedFavoriteButton(button: UIButton) {
+
+        let index = button.tag
+        button.isSelected = !button.isSelected
+        button.setImage(UIImage(named: "star"), for: .selected)
+        button.alpha = button.isSelected ? 0.1 : 1
+        
+        if button.isSelected {
+            favoriteMovies.remove(at: index)
+            DispatchQueue.main.async {
+                self.favoriteListTableView.reloadData()
+            }
+            UserDefaultsService.shared.saveFavoriteMovie(movie: favoriteMovies)
+        }
+        
+    }
 }
 
 private extension FavoriteMovieViewController {
@@ -79,6 +97,8 @@ extension FavoriteMovieViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteMovieTableViewCell.identifer, for: indexPath) as! FavoriteMovieTableViewCell
         
         cell.set(movies: favoriteMovies[indexPath.row])
+        cell.starButton.tag = indexPath.row
+        cell.starButton.addTarget(self, action: #selector(tappedFavoriteButton(button:)), for: .touchUpInside)
         
         return cell
     }

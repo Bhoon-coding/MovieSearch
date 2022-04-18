@@ -57,7 +57,6 @@ class FavoriteMovieTableViewCell: UITableViewCell {
     lazy var starButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "starFill"), for: .normal)
-        button.addTarget(self, action: #selector(tappedFavoriteButton(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -68,7 +67,7 @@ class FavoriteMovieTableViewCell: UITableViewCell {
             .replacingOccurrences(of: "</b>", with: "")
         let director = movies.director
             .dropLast()
-        let actor = movies.actor
+        let actor = "\(movies.actor)"
             .replacingOccurrences(of: "|", with: ",")
             .dropLast()
         
@@ -79,16 +78,6 @@ class FavoriteMovieTableViewCell: UITableViewCell {
         userRatingLabel.text = "평점: \(movies.userRating)"
     }
     
-    
-    // MARK: @objc
-    @objc func tappedFavoriteButton(sender: UIButton) {
-        
-        
-        
-        starButton.isSelected = !starButton.isSelected
-        starButton.setImage(UIImage(named: "star"), for: .selected)
-        starButton.alpha = starButton.isSelected ? 0.1 : 1
-    }
 }
 
 private extension FavoriteMovieTableViewCell {
