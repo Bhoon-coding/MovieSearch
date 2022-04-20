@@ -13,6 +13,9 @@ class SearchService {
 
     func searchedMovies(movie: [Movie]) -> [MovieInfo] {
         
+        var favoriteMoviesInfo: [MovieInfo] = []
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        
         let movieInfo: [MovieInfo] = movie.map { movie in
             let title = movie.title
                 .replacingOccurrences(of: "<b>", with: "")
@@ -34,9 +37,15 @@ class SearchService {
                                   userRating: movie.userRating,
                                   link: movie.link)
             
-            let movieInfoData = MovieInfo(movie: movieData,
+            var movieInfoData = MovieInfo(movie: movieData,
                                           isLiked: false)
             
+            for favMovieInfo in favoriteMoviesInfo {
+                if movieInfoData.movie.title == favMovieInfo.movie.title && favMovieInfo.isLiked == true {
+                    movieInfoData.isLiked = true
+                }
+            }
+
             return movieInfoData
         }
         return movieInfo
