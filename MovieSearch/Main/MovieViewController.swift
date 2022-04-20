@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class MainViewController: UIViewController {
+class MovieViewController: UIViewController {
     
     // MARK: Properties
     var movie: [Movie] = []
@@ -128,7 +128,7 @@ class MainViewController: UIViewController {
 }
 
 // MARK: extension - UI
-private extension MainViewController {
+private extension MovieViewController {
     
     func setUpNavigationBar() {
         let backBarButtonItem = UIBarButtonItem(title: nil,
@@ -177,7 +177,7 @@ private extension MainViewController {
 }
 
 // MARK: extension - SearchBar
-extension MainViewController: UISearchBarDelegate {
+extension MovieViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         // TODO: 영화 API 호출
@@ -205,7 +205,7 @@ extension MainViewController: UISearchBarDelegate {
 }
 
 // MARK: extension - TableView
-extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+extension MovieViewController: UITableViewDataSource, UITableViewDelegate {
     // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieInfo.count
