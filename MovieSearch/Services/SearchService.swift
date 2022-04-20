@@ -18,9 +18,14 @@ class SearchService {
                 .replacingOccurrences(of: "<b>", with: "")
                 .replacingOccurrences(of: "</b>", with: "")
             let director = movie.director
+                .replacingOccurrences(of: "|", with: ",")
+                .replacingOccurrences(of: "<b>", with: "")
+                .replacingOccurrences(of: "</b>", with: "")
                 .dropLast()
             let actor = movie.actor
                 .replacingOccurrences(of: "|", with: ",")
+                .replacingOccurrences(of: "<b>", with: "")
+                .replacingOccurrences(of: "</b>", with: "")
                 .dropLast()
             let movieData = Movie(title: title,
                                   image: movie.image,
