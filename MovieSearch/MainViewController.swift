@@ -91,7 +91,6 @@ class MainViewController: UIViewController {
     // MARK: @objc
     @objc func tappedStar(button: UIButton) {
         let index = button.tag
-        
         movieInfo[index].isLiked = !(movieInfo[index].isLiked)
         button.alpha = movieInfo[index].isLiked ? 1 : 0.1
         
@@ -104,10 +103,13 @@ class MainViewController: UIViewController {
         } else {
             button.setImage(UIImage(named: "star"), for: .normal)
             
+            favoriteMovie = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo[index])
+        }
+            
             // TODO: 즐겨찾기 기능 구현
 //            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movieInfo[index].movieInfo.title }
 //            favoriteMovie = removeFavoriteMovie
-        }
+//        }
 //        DispatchQueue.main.async {
 //            self.movieListTableView.reloadRows(at: [IndexPath(row: index, section: 0)],
 //                                               with: .automatic)
