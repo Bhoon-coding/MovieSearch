@@ -13,8 +13,8 @@ class MainViewController: UIViewController {
     
     // MARK: Properties
     
-    var movie: [Movie] = []
-    var favoriteMovie: [Movie] = []
+    var movieInfo: [MovieInfo] = []
+    var favoriteMovie: [MovieInfo] = []
     
     lazy var safeAreaView: UIView = {
         let view = UIView()
@@ -60,10 +60,7 @@ class MainViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie().enumerated().map { index, data in
-            Movie(movieInfo: data.movieInfo,
-                  isLiked: movie[index].isLiked)
-        }
+        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie()
     }
     
     override func viewDidLoad() {
@@ -95,32 +92,46 @@ class MainViewController: UIViewController {
     @objc func tappedStar(button: UIButton) {
         let index = button.tag
         
-        movie[index].isLiked = !(movie[index].isLiked)
-        //button.alpha = movieCellData[index1].isLiked ? 1 : 0.1
-        DispatchQueue.main.async {
-            self.movieListTableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-                                               with: .automatic)
+        movieInfo[index].isLiked = !(movieInfo[index].isLiked)
+        button.alpha = movieInfo[index].isLiked ? 1 : 0.1
+        
+        if movieInfo[index].isLiked {
+            button.setImage(UIImage(named: "starFill"), for: .normal)
+            
+            favoriteMovie.append(movieInfo[index])
+            UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovie)
+            
+        } else {
+            button.setImage(UIImage(named: "star"), for: .normal)
+            
+            // TODO: 즐겨찾기 기능 구현
+//            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movieInfo[index].movieInfo.title }
+//            favoriteMovie = removeFavoriteMovie
         }
+//        DispatchQueue.main.async {
+//            self.movieListTableView.reloadRows(at: [IndexPath(row: index, section: 0)],
+//                                               with: .automatic)
+//        }
         
         
 //        button.isSelected = !button.isSelected
 //        print("test index: \(index)")
 
-        if movie[index].isLiked {
-            favoriteMovie.append(movie[index])
-
-        } else {
-
-            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movie[index].movieInfo.title }
-            favoriteMovie = removeFavoriteMovie
-        }
+//        if movieInfo[index].isLiked {
+//            favoriteMovie.append(movie[index])
+//
+//        } else {
+//
+//            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movieInfo[index].movieInfo.title }
+//            favoriteMovie = removeFavoriteMovie
+//        }
 //
 //        button.alpha = button.isSelected ? 1 : 0.1
 //        button.setImage(UIImage(named: "starFill"), for: .selected)
 //
 //        let favMovies = favoriteMovie.map { $0.movieInfo }
         // MARK: 수정필요
-        UserDefaultsService.shared.saveFavoriteMovie(movie:  movie)
+//        UserDefaultsService.shared.saveFavoriteMovie(movie: movie)
         
     }
     
@@ -193,11 +204,17 @@ extension MainViewController: UISearchBarDelegate {
         NetworkService.shared.fetchMovieData(keyword: keyword) { result in
             switch result {
             case .success(let movieData):
+                
                 guard let movieData = movieData as? [Movie] else { return }
                 
-                self.movie = movieData.map {
-                    return self.movie(movieData: $0.movieInfo, isLiked: false)
-                }
+                self.movieInfo = SearchService.shared.searchedMovies(movie: movieData)
+                
+                
+                
+//                print("test : \(movieData)")
+//                self.movie = movieData.map {
+//                    return self.movie(movieData: $0.movieInfo, isLiked: false)
+//                }
                 
                 
 //                self.movies = movieData
@@ -220,7 +237,7 @@ extension MainViewController: UISearchBarDelegate {
 extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movie.count
+        return movieInfo.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -230,7 +247,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         //cell.configure(movies: movies[indexPath.row])
-        cell.configure(movie: movie[indexPath.row])
+        cell.configure(movieInfo: movieInfo[indexPath.row])
         
         cell.starButton.tag = indexPath.row
         cell.starButton.addTarget(self,
@@ -243,7 +260,7 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     // Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let movieDetailVC = MovieDetailViewController(movieInfo: movie[indexPath.row].movieInfo)
+        let movieDetailVC = MovieDetailViewController(movieInfo: movieInfo[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
         
         searchBar.resignFirstResponder()

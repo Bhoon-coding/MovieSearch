@@ -11,8 +11,8 @@ import WebKit
 class MovieDetailViewController: UIViewController {
     
     // MARK: Properties
-    var movieInfo: MovieInfo
-    var favoriteMovies: [Movie] = []
+    var movie: Movie
+    var favoriteMovies: [MovieInfo] = []
     
     lazy var contentScrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -82,24 +82,15 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: init
     init(movieInfo: MovieInfo) {
-        self.movieInfo = movieInfo
-        
-        let title = movieInfo.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
-        let director = movieInfo.director
-            .dropLast()
-        let actor = movieInfo.actor
-            .replacingOccurrences(of: "|", with: ",")
-            .dropLast()
+        self.movie = movieInfo.movie
         
         super.init(nibName: nil, bundle: nil)
         
-        movieImageView.load(urlString: movieInfo.image)
-        titleLabel.text = title
-        directorLabel.text = "감독: \(director) "
-        actorLabel.text = "출연: \(actor)"
-        userRatingLabel.text = "평점: \(movieInfo.userRating)"
+        movieImageView.load(urlString: movie.image)
+        titleLabel.text = movie.title
+        directorLabel.text = "감독: \(movie.director) "
+        actorLabel.text = "출연: \(movie.actor)"
+        userRatingLabel.text = "평점: \(movie.userRating)"
         
     }
     
@@ -141,9 +132,7 @@ private extension MovieDetailViewController {
     
     func setUpNavigationBar() {
         
-        navigationItem.title = movieInfo.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
+        navigationItem.title = movie.title
         
     }
     
@@ -208,7 +197,7 @@ private extension MovieDetailViewController {
     }
     
     func setUpWebView() {
-        let movieURL = URL(string: movieInfo.link)
+        let movieURL = URL(string: movie.link)
         let request = URLRequest(url: movieURL!)
         webView.load(request)
     }

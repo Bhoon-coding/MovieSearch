@@ -8,14 +8,14 @@
 import Foundation
 
 struct Movies: Codable {
-    let movies: [MovieInfo]
+    let movies: [Movie]
     
     enum CodingKeys: String, CodingKey {
         case movies = "items"
     }
 }
 
-struct MovieInfo: Codable {
+struct Movie: Codable {
     
     var title: String
     var image: String
@@ -26,7 +26,7 @@ struct MovieInfo: Codable {
     
 }
 
-struct Movie: Codable {
-    let movieInfo: MovieInfo
+struct MovieInfo: Codable {
+    let movie: Movie
     var isLiked: Bool = false
 }
