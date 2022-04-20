@@ -20,7 +20,9 @@ class UserDefaultsService {
         favoriteMovie = loadFavoriteMovie()
         
         favoriteMovie = favoriteMovie.filter {
-            $0.movie.title != movieInfo.movie.title
+            $0.movie.title != movieInfo.movie.title &&
+            $0.movie.director != movieInfo.movie.director &&
+            $0.movie.actor != movieInfo.movie.actor
         }
         
         saveFavoriteMovie(movieInfo: favoriteMovie)

@@ -12,9 +12,9 @@ import SnapKit
 class MainViewController: UIViewController {
     
     // MARK: Properties
-    
+    var movie: [Movie] = []
     var movieInfo: [MovieInfo] = []
-    var favoriteMovie: [MovieInfo] = []
+    var favoriteMoviesInfo: [MovieInfo] = []
     
     lazy var safeAreaView: UIView = {
         let view = UIView()
@@ -60,7 +60,7 @@ class MainViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
     }
     
     override func viewDidLoad() {
@@ -73,7 +73,12 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        
+        movieInfo = SearchService.shared.searchedMovies(movie: movie)
+        DispatchQueue.main.async {
+            self.movieListTableView.reloadData()
+        }
     }
 
     // MARK: Methods
@@ -101,44 +106,14 @@ class MainViewController: UIViewController {
         if movieInfo[index].isLiked {
             button.setImage(UIImage(named: "starFill"), for: .normal)
             
-            favoriteMovie.append(movieInfo[index])
-            UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovie)
+            favoriteMoviesInfo.append(movieInfo[index])
+            UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMoviesInfo)
             
         } else {
             button.setImage(UIImage(named: "star"), for: .normal)
             
-            favoriteMovie = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo[index])
+            favoriteMoviesInfo = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo[index])
         }
-            
-            // TODO: 즐겨찾기 기능 구현
-//            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movieInfo[index].movieInfo.title }
-//            favoriteMovie = removeFavoriteMovie
-//        }
-//        DispatchQueue.main.async {
-//            self.movieListTableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-//                                               with: .automatic)
-//        }
-        
-        
-//        button.isSelected = !button.isSelected
-//        print("test index: \(index)")
-
-//        if movieInfo[index].isLiked {
-//            favoriteMovie.append(movie[index])
-//
-//        } else {
-//
-//            let removeFavoriteMovie = favoriteMovie.filter { $0.movieInfo.title != movieInfo[index].movieInfo.title }
-//            favoriteMovie = removeFavoriteMovie
-//        }
-//
-//        button.alpha = button.isSelected ? 1 : 0.1
-//        button.setImage(UIImage(named: "starFill"), for: .selected)
-//
-//        let favMovies = favoriteMovie.map { $0.movieInfo }
-        // MARK: 수정필요
-//        UserDefaultsService.shared.saveFavoriteMovie(movie: movie)
-        
     }
     
     @objc func tappedFavoriteButton() {
@@ -212,18 +187,8 @@ extension MainViewController: UISearchBarDelegate {
             case .success(let movieData):
                 
                 guard let movieData = movieData as? [Movie] else { return }
-                
-                self.movieInfo = SearchService.shared.searchedMovies(movie: movieData)
-                
-                
-                
-//                print("test : \(movieData)")
-//                self.movie = movieData.map {
-//                    return self.movie(movieData: $0.movieInfo, isLiked: false)
-//                }
-                
-                
-//                self.movies = movieData
+                self.movie = movieData
+                self.movieInfo = SearchService.shared.searchedMovies(movie: self.movie)
                 
                 DispatchQueue.main.async {
                     self.movieListTableView.reloadData()
@@ -250,9 +215,6 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier,
                                                  for: indexPath) as! MovieListTableViewCell
         
-        
-        
-        //cell.configure(movies: movies[indexPath.row])
         cell.configure(movieInfo: movieInfo[indexPath.row])
         
         cell.starButton.tag = indexPath.row

@@ -13,8 +13,8 @@ class SearchService {
 
     func searchedMovies(movie: [Movie]) -> [MovieInfo] {
         
-        var favoriteMoviesInfo: [MovieInfo] = []
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        var favoriteMovieInfo: [MovieInfo] = []
+        favoriteMovieInfo = UserDefaultsService.shared.loadFavoriteMovie()
         
         let movieInfo: [MovieInfo] = movie.map { movie in
             let title = movie.title
@@ -40,12 +40,12 @@ class SearchService {
             var movieInfoData = MovieInfo(movie: movieData,
                                           isLiked: false)
             
-            for favMovieInfo in favoriteMoviesInfo {
-                if movieInfoData.movie.title == favMovieInfo.movie.title && favMovieInfo.isLiked == true {
+            for movieInfo in favoriteMovieInfo {
+                if movieInfoData.movie.title == movieInfo.movie.title && movieInfoData.movie.director == movieInfo.movie.director && movieInfoData.movie.actor == movieInfo.movie.actor && movieInfo.isLiked == true {
                     movieInfoData.isLiked = true
                 }
             }
-
+            
             return movieInfoData
         }
         return movieInfo
