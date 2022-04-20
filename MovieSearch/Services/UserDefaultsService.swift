@@ -15,14 +15,30 @@ class UserDefaultsService {
     
     // MARK: Methods
     
-    func loadFavoriteMovie() -> [Movie] {
+    func updateFavoriteMovie(movieInfo: MovieInfo) -> [MovieInfo] {
+        var favoriteMovie: [MovieInfo] = []
+        favoriteMovie = loadFavoriteMovie()
+        
+        favoriteMovie = favoriteMovie.filter {
+            $0.movie.title != movieInfo.movie.title &&
+            $0.movie.director != movieInfo.movie.director &&
+            $0.movie.actor != movieInfo.movie.actor
+        }
+        
+        saveFavoriteMovie(movieInfo: favoriteMovie)
+        
+        return favoriteMovie
+        
+    }
+    
+    func loadFavoriteMovie() -> [MovieInfo] {
         guard let loadData = defaults.value(forKey: "favoriteMovies") as? Data else { return [] }
-        let favoriteMovies = try! PropertyListDecoder().decode([Movie].self,
+        let favoriteMovies = try! PropertyListDecoder().decode([MovieInfo].self,
                                                               from: loadData)
         return favoriteMovies
     }
     
-    func saveFavoriteMovie(movie: [Movie]) {
-        defaults.set(try? PropertyListEncoder().encode(movie), forKey: "favoriteMovies")
+    func saveFavoriteMovie(movieInfo: [MovieInfo]) {
+        defaults.set(try? PropertyListEncoder().encode(movieInfo), forKey: "favoriteMovies")
     }
 }

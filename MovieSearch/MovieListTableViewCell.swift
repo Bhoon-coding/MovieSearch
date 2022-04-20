@@ -47,8 +47,6 @@ class MovieListTableViewCell: UITableViewCell {
     
     lazy var starButton: UIButton = {
         let button = UIButton()
-        button.alpha = 0.1
-        button.setImage(UIImage(named: "star"), for: .normal)
         return button
     }()
     
@@ -65,23 +63,19 @@ class MovieListTableViewCell: UITableViewCell {
     }
     
     // MARK: Methods
-    func set(movies: Movie) {
-        let title = movies.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
-        let director = movies.director
-            .dropLast()
-        let actor = movies.actor
-            .replacingOccurrences(of: "|", with: ",")
-            .dropLast()
-        
-        movieImageView.load(urlString: movies.image)
-        titleLabel.text = title
-        directorLabel.text = "감독: \(director) "
-        actorLabel.text = "출연: \(actor)"
-        userRatingLabel.text = "평점: \(movies.userRating)"
-    }
     
+    func configure(movieInfo: MovieInfo) {
+        let movie = movieInfo.movie
+        
+        movieImageView.load(urlString: movie.image)
+        titleLabel.text = movie.title
+        directorLabel.text = "감독: \(movie.director) "
+        actorLabel.text = "출연: \(movie.actor)"
+        userRatingLabel.text = "평점: \(movie.userRating)"
+        
+        starButton.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star" ), for: .normal)
+        starButton.alpha = movieInfo.isLiked ? 1 : 0.1
+    }
 }
 
 private extension MovieListTableViewCell {

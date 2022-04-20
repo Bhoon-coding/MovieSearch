@@ -12,6 +12,8 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: Properties
     var movie: Movie
+    var movieInfo: MovieInfo
+    var favoriteMovies: [MovieInfo] = []
     
     lazy var contentScrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -64,8 +66,12 @@ class MovieDetailViewController: UIViewController {
     
     lazy var starButton: UIButton = {
         let button = UIButton()
-        button.alpha = 0.1
-        button.setImage(UIImage(named: "star"), for: .normal)
+        button.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star")
+                            , for: .normal)
+        button.alpha = movieInfo.isLiked ? 1 : 0.1
+        button.addTarget(self,
+                         action: #selector(tappedStar),
+                         for: .touchUpInside)
         return button
     }()
     
@@ -78,24 +84,17 @@ class MovieDetailViewController: UIViewController {
     
     
     // MARK: init
-    init(movie: Movie) {
-        self.movie = movie
-        
-        let title = movie.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
-        let director = movie.director
-            .dropLast()
-        let actor = movie.actor
-            .replacingOccurrences(of: "|", with: ",")
-            .dropLast()
+    init(movieInfo: MovieInfo) {
+        self.movieInfo = movieInfo
+        self.movie = movieInfo.movie
         
         super.init(nibName: nil, bundle: nil)
         
+        
         movieImageView.load(urlString: movie.image)
-        titleLabel.text = title
-        directorLabel.text = "감독: \(director) "
-        actorLabel.text = "출연: \(actor)"
+        titleLabel.text = movie.title
+        directorLabel.text = "감독: \(movie.director) "
+        actorLabel.text = "출연: \(movie.actor)"
         userRatingLabel.text = "평점: \(movie.userRating)"
         
     }
@@ -107,7 +106,7 @@ class MovieDetailViewController: UIViewController {
     // MARK: LifeCycle
     override func loadView() {
         super.loadView()
-        
+        favoriteMovies = UserDefaultsService.shared.loadFavoriteMovie()
     }
         
     override func viewDidLoad() {
@@ -121,6 +120,27 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: Methods
     
+    // MARK: @objc
+    @objc func tappedStar() {
+        
+        movieInfo.isLiked = !movieInfo.isLiked
+        
+        starButton.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star")
+                            , for: .normal)
+        starButton.alpha = movieInfo.isLiked ? 1 : 0.1
+        
+        if movieInfo.isLiked {
+            favoriteMovies.append(movieInfo)
+        
+        } else {
+            favoriteMovies = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo)
+        }
+        
+        UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovies)
+        
+        
+    }
+    
 }
 
 // MARK: extension - UI
@@ -129,8 +149,6 @@ private extension MovieDetailViewController {
     func setUpNavigationBar() {
         
         navigationItem.title = movie.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
         
     }
     
@@ -170,9 +188,9 @@ private extension MovieDetailViewController {
         movieInfoStackView.snp.makeConstraints {
             $0.leading.equalTo(movieImageView.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(64)
-            $0.width.equalTo(200)
             $0.top.bottom.equalToSuperview()
         }
+        
         movieInfoStackView.addArrangedSubview(titleLabel)
         movieInfoStackView.addArrangedSubview(directorLabel)
         movieInfoStackView.addArrangedSubview(actorLabel)
@@ -192,7 +210,6 @@ private extension MovieDetailViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
 
         }
-        
     }
     
     func setUpWebView() {

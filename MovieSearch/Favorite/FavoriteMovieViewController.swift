@@ -11,7 +11,7 @@ import SnapKit
 
 final class FavoriteMovieViewController: UIViewController {
     
-    var favoriteMovies: [Movie] = []
+    var favoriteMovies: [MovieInfo] = []
     
     // MARK: Properties
     lazy var favoriteListTableView: UITableView = {
@@ -37,6 +37,13 @@ final class FavoriteMovieViewController: UIViewController {
         setUpDelegate()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        favoriteMovies = UserDefaultsService.shared.loadFavoriteMovie()
+        DispatchQueue.main.async {
+            self.favoriteListTableView.reloadData()
+        }
+    }
+    
     // MARK: Methods
     
     private func setUpDelegate() {
@@ -48,16 +55,15 @@ final class FavoriteMovieViewController: UIViewController {
     @objc func tappedFavoriteButton(button: UIButton) {
 
         let index = button.tag
-        button.isSelected = !button.isSelected
-        button.setImage(UIImage(named: "star"), for: .selected)
-        button.alpha = button.isSelected ? 0.1 : 1
         
-            if button.isSelected {
-                favoriteMovies.remove(at: index)
-                DispatchQueue.main.async {
+        favoriteMovies[index].isLiked = !favoriteMovies[index].isLiked
+        
+        if !favoriteMovies[index].isLiked {
+            favoriteMovies = favoriteMovies.filter { $0.isLiked }
+            DispatchQueue.main.async {
                 self.favoriteListTableView.reloadData()
-                UserDefaultsService.shared.saveFavoriteMovie(movie: self.favoriteMovies)
             }
+            UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovies)
         }
         
     }
@@ -96,16 +102,18 @@ extension FavoriteMovieViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteMovieTableViewCell.identifer, for: indexPath) as! FavoriteMovieTableViewCell
         
-        cell.set(movies: favoriteMovies[indexPath.row])
+        cell.configure(movieInfo: favoriteMovies[indexPath.row])
         cell.starButton.tag = indexPath.row
-        cell.starButton.addTarget(self, action: #selector(tappedFavoriteButton(button:)), for: .touchUpInside)
+        cell.starButton.addTarget(self, action: #selector(tappedFavoriteButton(button:)),
+                                  for: .touchUpInside)
         
         return cell
     }
     
     // Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movieDetailVC = MovieDetailViewController(movie: favoriteMovies[indexPath.row])
+        let movieDetailVC = MovieDetailViewController(movieInfo: favoriteMovies[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
+        
     }
 }

@@ -16,6 +16,7 @@ struct Movies: Codable {
 }
 
 struct Movie: Codable {
+    
     var title: String
     var image: String
     var director: String
@@ -23,4 +24,9 @@ struct Movie: Codable {
     var userRating: String
     var link: String
     
+}
+
+struct MovieInfo: Codable {
+    let movie: Movie
+    var isLiked: Bool = false
 }
