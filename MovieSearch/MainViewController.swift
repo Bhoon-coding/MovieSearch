@@ -72,6 +72,10 @@ class MainViewController: UIViewController {
     
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        favoriteMovie = UserDefaultsService.shared.loadFavoriteMovie()
+    }
+
     // MARK: Methods
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
