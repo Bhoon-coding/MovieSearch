@@ -37,6 +37,13 @@ final class FavoriteMovieViewController: UIViewController {
         setUpDelegate()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        favoriteMovies = UserDefaultsService.shared.loadFavoriteMovie()
+        DispatchQueue.main.async {
+            self.favoriteListTableView.reloadData()
+        }
+    }
+    
     // MARK: Methods
     
     private func setUpDelegate() {
@@ -56,6 +63,7 @@ final class FavoriteMovieViewController: UIViewController {
             DispatchQueue.main.async {
                 self.favoriteListTableView.reloadData()
             }
+            UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovies)
         }
         
     }

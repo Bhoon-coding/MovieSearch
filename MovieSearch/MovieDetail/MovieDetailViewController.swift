@@ -12,6 +12,7 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: Properties
     var movie: Movie
+    var movieInfo: MovieInfo
     var favoriteMovies: [MovieInfo] = []
     
     lazy var contentScrollView: UIScrollView = {
@@ -65,7 +66,9 @@ class MovieDetailViewController: UIViewController {
     
     lazy var starButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "starFill"), for: .normal)
+        button.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star")
+                            , for: .normal)
+        button.alpha = movieInfo.isLiked ? 1 : 0.1
         button.addTarget(self,
                          action: #selector(tappedStar),
                          for: .touchUpInside)
@@ -82,9 +85,11 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: init
     init(movieInfo: MovieInfo) {
+        self.movieInfo = movieInfo
         self.movie = movieInfo.movie
         
         super.init(nibName: nil, bundle: nil)
+        
         
         movieImageView.load(urlString: movie.image)
         titleLabel.text = movie.title
@@ -118,10 +123,21 @@ class MovieDetailViewController: UIViewController {
     // MARK: @objc
     @objc func tappedStar() {
         
-        starButton.isSelected = !starButton.isSelected
+        movieInfo.isLiked = !movieInfo.isLiked
         
-        starButton.alpha = starButton.isSelected ? 0.1 : 1
-        starButton.setImage(UIImage(named: "star"), for: .selected)
+        starButton.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star")
+                            , for: .normal)
+        starButton.alpha = movieInfo.isLiked ? 1 : 0.1
+        
+        if movieInfo.isLiked {
+            favoriteMovies.append(movieInfo)
+        
+        } else {
+            favoriteMovies = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo)
+        }
+        
+        UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovies)
+        
         
     }
     
