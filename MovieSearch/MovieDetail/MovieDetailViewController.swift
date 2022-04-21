@@ -13,7 +13,7 @@ class MovieDetailViewController: UIViewController {
     // MARK: Properties
     var movie: Movie
     var movieInfo: MovieInfo
-    var favoriteMovies: [MovieInfo] = []
+    var favoriteMoviesInfo: [MovieInfo] = []
     
     lazy var contentScrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -106,7 +106,7 @@ class MovieDetailViewController: UIViewController {
     // MARK: LifeCycle
     override func loadView() {
         super.loadView()
-        favoriteMovies = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
     }
         
     override func viewDidLoad() {
@@ -130,13 +130,13 @@ class MovieDetailViewController: UIViewController {
         starButton.alpha = movieInfo.isLiked ? 1 : 0.1
         
         if movieInfo.isLiked {
-            favoriteMovies.append(movieInfo)
+            favoriteMoviesInfo.append(movieInfo)
         
         } else {
-            favoriteMovies = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo)
+            favoriteMoviesInfo = UserDefaultsService.shared.updateFavoriteMoviesInfo(movieInfo: movieInfo)
         }
         
-        UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMovies)
+        UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMoviesInfo)
         
         
     }

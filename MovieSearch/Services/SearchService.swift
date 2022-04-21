@@ -14,7 +14,7 @@ class SearchService {
     func searchedMovies(movie: [Movie]) -> [MovieInfo] {
         
         var favoriteMovieInfo: [MovieInfo] = []
-        favoriteMovieInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMovieInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
         
         let movieInfo: [MovieInfo] = movie.map { movie in
             let title = movie.title

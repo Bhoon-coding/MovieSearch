@@ -12,8 +12,8 @@ import SnapKit
 class MovieViewController: UIViewController {
     
     // MARK: Properties
-    var movie: [Movie] = []
-    var movieInfo: [MovieInfo] = []
+    var movies: [Movie] = []
+    var moviesInfo: [MovieInfo] = []
     var favoriteMoviesInfo: [MovieInfo] = []
     
     lazy var safeAreaView: UIView = {
@@ -60,7 +60,7 @@ class MovieViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
     }
     
     override func viewDidLoad() {
@@ -73,9 +73,9 @@ class MovieViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMovie()
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
         
-        movieInfo = SearchService.shared.searchedMovies(movie: movie)
+        moviesInfo = SearchService.shared.searchedMovies(movie: movies)
         DispatchQueue.main.async {
             self.movieListTableView.reloadData()
         }
@@ -100,19 +100,19 @@ class MovieViewController: UIViewController {
     // MARK: @objc
     @objc func tappedStar(button: UIButton) {
         let index = button.tag
-        movieInfo[index].isLiked = !(movieInfo[index].isLiked)
-        button.alpha = movieInfo[index].isLiked ? 1 : 0.1
+        moviesInfo[index].isLiked = !(moviesInfo[index].isLiked)
+        button.alpha = moviesInfo[index].isLiked ? 1 : 0.1
         
-        if movieInfo[index].isLiked {
+        if moviesInfo[index].isLiked {
             button.setImage(UIImage(named: "starFill"), for: .normal)
             
-            favoriteMoviesInfo.append(movieInfo[index])
+            favoriteMoviesInfo.append(moviesInfo[index])
             UserDefaultsService.shared.saveFavoriteMovie(movieInfo: favoriteMoviesInfo)
             
         } else {
             button.setImage(UIImage(named: "star"), for: .normal)
             
-            favoriteMoviesInfo = UserDefaultsService.shared.updateFavoriteMovie(movieInfo: movieInfo[index])
+            favoriteMoviesInfo = UserDefaultsService.shared.updateFavoriteMoviesInfo(movieInfo: moviesInfo[index])
         }
     }
     
@@ -187,8 +187,8 @@ extension MovieViewController: UISearchBarDelegate {
             case .success(let movieData):
                 
                 guard let movieData = movieData as? [Movie] else { return }
-                self.movie = movieData
-                self.movieInfo = SearchService.shared.searchedMovies(movie: self.movie)
+                self.movies = movieData
+                self.moviesInfo = SearchService.shared.searchedMovies(movie: self.movies)
                 
                 DispatchQueue.main.async {
                     self.movieListTableView.reloadData()
@@ -208,14 +208,14 @@ extension MovieViewController: UISearchBarDelegate {
 extension MovieViewController: UITableViewDataSource, UITableViewDelegate {
     // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieInfo.count
+        return moviesInfo.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier,
                                                  for: indexPath) as! MovieListTableViewCell
         
-        cell.configure(movieInfo: movieInfo[indexPath.row])
+        cell.configure(movieInfo: moviesInfo[indexPath.row])
         
         cell.starButton.tag = indexPath.row
         cell.starButton.addTarget(self,
@@ -228,7 +228,7 @@ extension MovieViewController: UITableViewDataSource, UITableViewDelegate {
     // Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let movieDetailVC = MovieDetailViewController(movieInfo: movieInfo[indexPath.row])
+        let movieDetailVC = MovieDetailViewController(movieInfo: moviesInfo[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
         
         searchBar.resignFirstResponder()
