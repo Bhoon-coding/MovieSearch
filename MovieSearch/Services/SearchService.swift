@@ -11,12 +11,12 @@ class SearchService {
     
     static let shared = SearchService()
 
-    func searchedMovies(movie: [Movie]) -> [MovieInfo] {
+    func searchedMovies(movies: [Movie]) -> [MovieInfo] {
         
-        var favoriteMovieInfo: [MovieInfo] = []
-        favoriteMovieInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
+        var favoriteMoviesInfo: [MovieInfo] = []
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
         
-        let movieInfo: [MovieInfo] = movie.map { movie in
+        let moviesInfo: [MovieInfo] = movies.map { movie in
             let title = movie.title
                 .replacingOccurrences(of: "<b>", with: "")
                 .replacingOccurrences(of: "</b>", with: "")
@@ -40,15 +40,18 @@ class SearchService {
             var movieInfoData = MovieInfo(movie: movieData,
                                           isLiked: false)
             
-            for movieInfo in favoriteMovieInfo {
-                if movieInfoData.movie.title == movieInfo.movie.title && movieInfoData.movie.director == movieInfo.movie.director && movieInfoData.movie.actor == movieInfo.movie.actor && movieInfo.isLiked == true {
+            for movieInfo in favoriteMoviesInfo {
+                if movieInfoData.movie.title == movieInfo.movie.title &&
+                    movieInfoData.movie.director == movieInfo.movie.director &&
+                    movieInfoData.movie.actor == movieInfo.movie.actor &&
+                    movieInfo.isLiked == true {
                     movieInfoData.isLiked = true
                 }
             }
             
             return movieInfoData
         }
-        return movieInfo
+        return moviesInfo
         
     }
 

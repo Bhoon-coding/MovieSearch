@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class MovieDetailViewController: UIViewController {
+final class MovieDetailViewController: UIViewController {
     
     // MARK: Properties
     var movie: Movie
@@ -146,13 +146,13 @@ class MovieDetailViewController: UIViewController {
 // MARK: extension - UI
 private extension MovieDetailViewController {
     
-    func setUpNavigationBar() {
+    private func setUpNavigationBar() {
         
         navigationItem.title = movie.title
         
     }
     
-    func setUpUI() {
+    private func setUpUI() {
     
         view.backgroundColor = .white
         
@@ -212,7 +212,7 @@ private extension MovieDetailViewController {
         }
     }
     
-    func setUpWebView() {
+    private func setUpWebView() {
         let movieURL = URL(string: movie.link)
         let request = URLRequest(url: movieURL!)
         webView.load(request)

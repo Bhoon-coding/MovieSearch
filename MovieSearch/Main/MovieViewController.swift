@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class MovieViewController: UIViewController {
+final class MovieViewController: UIViewController {
     
     // MARK: Properties
     var movies: [Movie] = []
@@ -57,25 +57,21 @@ class MovieViewController: UIViewController {
     }()
     
     // MARK: LifeCycle
-    
-    override func loadView() {
-        super.loadView()
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpNavigationBar()
         setUpUI()
         setDelegate()
+        
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
     
     }
     
     override func viewWillAppear(_ animated: Bool) {
         favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
         
-        moviesInfo = SearchService.shared.searchedMovies(movie: movies)
+        moviesInfo = SearchService.shared.searchedMovies(movies: movies)
         DispatchQueue.main.async {
             self.movieListTableView.reloadData()
         }
@@ -130,7 +126,7 @@ class MovieViewController: UIViewController {
 // MARK: extension - UI
 private extension MovieViewController {
     
-    func setUpNavigationBar() {
+    private func setUpNavigationBar() {
         let backBarButtonItem = UIBarButtonItem(title: nil,
                                                 style: .plain,
                                                 target: self,
@@ -139,7 +135,7 @@ private extension MovieViewController {
         navigationItem.backBarButtonItem = backBarButtonItem
     }
     
-    func setUpUI() {
+    private func setUpUI() {
         
         view.backgroundColor = .white
         
@@ -188,7 +184,7 @@ extension MovieViewController: UISearchBarDelegate {
                 
                 guard let movieData = movieData as? [Movie] else { return }
                 self.movies = movieData
-                self.moviesInfo = SearchService.shared.searchedMovies(movie: self.movies)
+                self.moviesInfo = SearchService.shared.searchedMovies(movies: self.movies)
                 
                 DispatchQueue.main.async {
                     self.movieListTableView.reloadData()

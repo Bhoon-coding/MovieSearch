@@ -71,7 +71,7 @@ final class FavoriteMovieViewController: UIViewController {
 
 private extension FavoriteMovieViewController {
     
-    func setUpNavigationBar() {
+    private func setUpNavigationBar() {
         let backBarButtonItem = UIBarButtonItem(title: nil,
                                                 style: .plain,
                                                 target: self,
@@ -80,7 +80,7 @@ private extension FavoriteMovieViewController {
         navigationItem.backBarButtonItem = backBarButtonItem
     }
     
-    func setUpUI() {
+    private func setUpUI() {
         
         view.backgroundColor = .white
         
