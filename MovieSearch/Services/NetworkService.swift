@@ -25,7 +25,8 @@ class NetworkService {
                    method: .get,
                    parameters: searchParams,
                    encoding: URLEncoding.default,
-                   headers: ["X-Naver-Client-Id": clientID, "X-Naver-Client-Secret": clientSecret])
+                   headers: ["X-Naver-Client-Id": clientID,
+                             "X-Naver-Client-Secret": clientSecret])
             .validate(statusCode: 200..<300)
             .responseDecodable(of: Movies.self) { response in
                 switch response.result {

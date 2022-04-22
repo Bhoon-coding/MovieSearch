@@ -14,6 +14,7 @@ final class FavoriteMovieViewController: UIViewController {
     var favoriteMoviesInfo: [MovieInfo] = []
     
     // MARK: Properties
+    
     lazy var favoriteListTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(FavoriteMovieTableViewCell.self,
@@ -23,18 +24,15 @@ final class FavoriteMovieViewController: UIViewController {
     }()
     
     // MARK: LifeCycle
-    override func loadView() {
-        super.loadView()
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "즐겨찾기 목록"
         setUpNavigationBar()
         setUpUI()
         setUpDelegate()
+        
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +50,7 @@ final class FavoriteMovieViewController: UIViewController {
     }
     
     // MARK: @objc
+    
     @objc func tappedFavoriteButton(button: UIButton) {
 
         let index = button.tag
@@ -78,6 +77,8 @@ private extension FavoriteMovieViewController {
                                                 action: nil)
         backBarButtonItem.tintColor = .black
         navigationItem.backBarButtonItem = backBarButtonItem
+        
+        navigationItem.title = "즐겨찾기 목록"
     }
     
     private func setUpUI() {

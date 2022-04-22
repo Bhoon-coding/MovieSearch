@@ -11,7 +11,17 @@ import SnapKit
 
 final class MovieViewController: UIViewController {
     
+    private enum Font {
+        static let boldTitleLabel = UIFont.boldSystemFont(ofSize: 24)
+    }
+    
+    private enum Color {
+        static let label = UIColor.label
+        static let lightGray = UIColor.lightGray
+    }
+    
     // MARK: Properties
+    
     var movies: [Movie] = []
     var moviesInfo: [MovieInfo] = []
     var favoriteMoviesInfo: [MovieInfo] = []
@@ -24,8 +34,8 @@ final class MovieViewController: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "네이버 영화 검색"
-        label.textColor = .label
-        label.font = .boldSystemFont(ofSize: 24)
+        label.textColor = Color.label
+        label.font = Font.boldTitleLabel
         return label
     }()
     
@@ -38,7 +48,7 @@ final class MovieViewController: UIViewController {
                          action: #selector(tappedFavoriteButton),
                          for: .touchUpInside)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderColor = Color.lightGray.cgColor
         button.layer.cornerRadius = 5
         return button
     }()
@@ -57,6 +67,7 @@ final class MovieViewController: UIViewController {
     }()
     
     // MARK: LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,8 +105,10 @@ final class MovieViewController: UIViewController {
     }
     
     // MARK: @objc
+    
     @objc func tappedStar(button: UIButton) {
         let index = button.tag
+        
         moviesInfo[index].isLiked = !(moviesInfo[index].isLiked)
         button.alpha = moviesInfo[index].isLiked ? 1 : 0.1
         
@@ -117,13 +130,13 @@ final class MovieViewController: UIViewController {
         let favoriteMovieVC = FavoriteMovieViewController()
         navigationController?.pushViewController(favoriteMovieVC, animated: true)
         
-        
         searchBar.resignFirstResponder()
     }
     
 }
 
 // MARK: extension - UI
+
 private extension MovieViewController {
     
     private func setUpNavigationBar() {
@@ -173,6 +186,7 @@ private extension MovieViewController {
 }
 
 // MARK: extension - SearchBar
+
 extension MovieViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -201,6 +215,7 @@ extension MovieViewController: UISearchBarDelegate {
 }
 
 // MARK: extension - TableView
+
 extension MovieViewController: UITableViewDataSource, UITableViewDelegate {
     // DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

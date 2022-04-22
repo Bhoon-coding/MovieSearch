@@ -45,6 +45,7 @@ class SearchService {
                     movieInfoData.movie.director == movieInfo.movie.director &&
                     movieInfoData.movie.actor == movieInfo.movie.actor &&
                     movieInfo.isLiked == true {
+                    
                     movieInfoData.isLiked = true
                 }
             }

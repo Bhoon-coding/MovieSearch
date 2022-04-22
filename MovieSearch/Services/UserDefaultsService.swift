@@ -10,6 +10,7 @@ import Foundation
 class UserDefaultsService {
     
     // MARK: Properties
+    
     static let shared = UserDefaultsService()
     let defaults = UserDefaults.standard
     

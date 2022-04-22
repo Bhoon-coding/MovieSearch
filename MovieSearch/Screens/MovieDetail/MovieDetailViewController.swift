@@ -11,6 +11,7 @@ import WebKit
 final class MovieDetailViewController: UIViewController {
     
     // MARK: Properties
+    
     var movie: Movie
     var movieInfo: MovieInfo
     var favoriteMoviesInfo: [MovieInfo] = []
@@ -84,6 +85,7 @@ final class MovieDetailViewController: UIViewController {
     
     
     // MARK: init
+    
     init(movieInfo: MovieInfo) {
         self.movieInfo = movieInfo
         self.movie = movieInfo.movie
@@ -104,10 +106,6 @@ final class MovieDetailViewController: UIViewController {
     }
     
     // MARK: LifeCycle
-    override func loadView() {
-        super.loadView()
-        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
-    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,11 +114,12 @@ final class MovieDetailViewController: UIViewController {
         setUpUI()
         setUpWebView()
         
+        favoriteMoviesInfo = UserDefaultsService.shared.loadFavoriteMoviesInfo()
+        
     }
     
-    // MARK: Methods
-    
     // MARK: @objc
+    
     @objc func tappedStar() {
         
         movieInfo.isLiked = !movieInfo.isLiked
@@ -144,6 +143,7 @@ final class MovieDetailViewController: UIViewController {
 }
 
 // MARK: extension - UI
+
 private extension MovieDetailViewController {
     
     private func setUpNavigationBar() {

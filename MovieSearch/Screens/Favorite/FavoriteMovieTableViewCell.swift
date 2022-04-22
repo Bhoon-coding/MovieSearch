@@ -1,16 +1,25 @@
 //
-//  MovieListTableViewCell.swift
+//  FavoriteMovieTableViewCell.swift
 //  MovieSearch
 //
-//  Created by BH on 2022/04/13.
+//  Created by BH on 2022/04/18.
 //
 
 import UIKit
 
-class MovieListTableViewCell: UITableViewCell {
-
+class FavoriteMovieTableViewCell: UITableViewCell {
+    
     // MARK: Properties
-    static let identifier = "MovieListTableViewCell"
+    static let identifer = "FavoriteMovieTableViewCell"
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUpCell()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     lazy var movieImageView: UIImageView = {
         let imageView = UIImageView()
@@ -47,20 +56,9 @@ class MovieListTableViewCell: UITableViewCell {
     
     lazy var starButton: UIButton = {
         let button = UIButton()
+        button.setImage(UIImage(named: "starFill"), for: .normal)
         return button
     }()
-    
-    
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpCell()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: Methods
     
@@ -72,13 +70,11 @@ class MovieListTableViewCell: UITableViewCell {
         directorLabel.text = "감독: \(movie.director) "
         actorLabel.text = "출연: \(movie.actor)"
         userRatingLabel.text = "평점: \(movie.userRating)"
-        
-        starButton.setImage(UIImage(named: movieInfo.isLiked ? "starFill" : "star" ), for: .normal)
-        starButton.alpha = movieInfo.isLiked ? 1 : 0.1
     }
+    
 }
 
-private extension MovieListTableViewCell {
+private extension FavoriteMovieTableViewCell {
     // MARK: Cell Layout
     private func setUpCell() {
         
@@ -103,7 +99,6 @@ private extension MovieListTableViewCell {
         contentView.addSubview(starButton)
         starButton.snp.makeConstraints {
             $0.top.trailing.equalToSuperview().inset(16)
-            $0.size.equalTo(24)
         }
         
     }
